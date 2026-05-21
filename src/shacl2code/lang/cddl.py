@@ -25,6 +25,11 @@ DATATYPE_MAP = {
     "http://www.w3.org/2001/XMLSchema#dateTimeStamp": "#6.1(uint)",
 }
 
+PATTERNABLE_BASE_TYPES = {
+    "http://www.w3.org/2001/XMLSchema#string": "tstr",
+    "http://www.w3.org/2001/XMLSchema#anyURI": "anyURI",
+}
+
 
 def _sanitize_name(name):
     name = re.sub(r"[^a-zA-Z0-9_]", "_", str(name))
@@ -180,11 +185,8 @@ class CddlRender(BasicJinjaRender):
                     if prop_type is None:
                         raise ValueError(f"Unknown data type {p.datatype}")
                     if p.pattern:
-                        if p.datatype in (
-                            "http://www.w3.org/2001/XMLSchema#string",
-                            "http://www.w3.org/2001/XMLSchema#anyURI",
-                        ):
-                            prop_type = f'{prop_type.split(" .regexp ")[0]} .regexp "{_escape_string(p.pattern)}"'
+                        if p.datatype in PATTERNABLE_BASE_TYPES:
+                            prop_type = f'{PATTERNABLE_BASE_TYPES[p.datatype]} .regexp "{_escape_string(p.pattern)}"'
 
                 prop_defs.append(
                     {
