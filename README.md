@@ -34,6 +34,12 @@ Or from stdin:
 cat model.jsonld | shacl2code generate -i - python -o out
 ```
 
+To generate a native CBOR-first CDDL schema:
+
+```shell
+shacl2code generate -i model.jsonld cddl -o schema.cddl
+```
+
 For more information, run:
 
 ```shell

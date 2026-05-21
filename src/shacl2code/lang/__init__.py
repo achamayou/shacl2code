@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 # All renderers must be imported here to be registered
+from .cddl import CddlRender
 from .cpp import CppRender
 from .golang import GoLangRender
 from .jinja import JinjaRender
@@ -13,6 +14,7 @@ from .python import PythonRender
 
 __all__ = [
     "LANGUAGES",
+    "CddlRender",
     "CppRender",
     "GoLangRender",
     "JinjaRender",
