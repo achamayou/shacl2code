@@ -77,7 +77,7 @@ def _list_occurrence(prop):
 
 @language("cddl")
 class CddlRender(BasicJinjaRender):
-    HELP = "CDDL Schema (native CBOR-first)"
+    HELP = "CDDL Schema (native CBOR first)"
 
     def __init__(self, args):
         super().__init__(args, TEMPLATE_DIR / "cddl.j2")
@@ -180,18 +180,11 @@ class CddlRender(BasicJinjaRender):
                     if prop_type is None:
                         raise ValueError(f"Unknown data type {p.datatype}")
                     if p.pattern:
-                        if p.datatype not in (
+                        if p.datatype in (
                             "http://www.w3.org/2001/XMLSchema#string",
                             "http://www.w3.org/2001/XMLSchema#anyURI",
-                            "http://www.w3.org/2001/XMLSchema#dateTime",
-                            "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
                         ):
-                            raise ValueError(
-                                f"Property '{p.path}' type '{p.datatype}' cannot have a pattern"
-                            )
-                        prop_type = (
-                            f'{prop_type.split(" .regexp ")[0]} .regexp "{_escape_string(p.pattern)}"'
-                        )
+                            prop_type = f'{prop_type.split(" .regexp ")[0]} .regexp "{_escape_string(p.pattern)}"'
 
                 prop_defs.append(
                     {

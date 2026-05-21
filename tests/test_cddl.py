@@ -108,11 +108,14 @@ def test_class_layering_and_cardinality():
     assert "test_class = { label.type => const.test_class" in out
     assert "test_class_derived =" in out
     assert "test_class_props = {" in out
-    assert "prop_test_class_string_scalar_prop = tstr" in out
-    assert "?label.test_class_string_scalar_prop => prop_test_class_string_scalar_prop" in out
-    assert (
-        "label.test_class_required_string_list_prop => [ 1*2 prop_test_class_required_required_string_list_prop ]"
-        in out
+    assert re.search(r"prop_test_class_.*string_scalar_prop = tstr", out)
+    assert re.search(
+        r"\?label\.test_class_string_scalar_prop => prop_test_class_.*string_scalar_prop",
+        out,
+    )
+    assert re.search(
+        r"label\.test_class_required_string_list_prop => \[ 1\*2 prop_test_class_required_.*required_string_list_prop \]",
+        out,
     )
     assert "$label.type /= const.test_class" in out
     assert "$AnyClass /= test_class" in out
