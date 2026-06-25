@@ -66,6 +66,28 @@ def test_jsonschema(model_server, test_context_url):
     yield json.loads(p.stdout)
 
 
+@pytest.fixture(scope="session")
+def test_cddl(model_server, test_context_url):
+    p = subprocess.run(
+        [
+            "shacl2code",
+            "generate",
+            "--input",
+            MODEL_DIR / "test.ttl",
+            "--context",
+            test_context_url,
+            "cddl",
+            "--output",
+            "-",
+        ],
+        check=True,
+        stdout=subprocess.PIPE,
+        encoding="utf-8",
+    )
+
+    yield p.stdout
+
+
 @pytest.fixture(scope="function")
 def test_timezone():
     try:

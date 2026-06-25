@@ -5,6 +5,7 @@
 """Language binding renderers for shacl2code"""
 
 # All renderers must be imported here to be registered
+from .cddl import CddlRender
 from .cpp import CppRender
 from .golang import GoLangRender
 from .jinja import JinjaRender
@@ -15,6 +16,7 @@ from .rust import RustRender
 
 __all__ = [
     "LANGUAGES",
+    "CddlRender",
     "CppRender",
     "GoLangRender",
     "JinjaRender",

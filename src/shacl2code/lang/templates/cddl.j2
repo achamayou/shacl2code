@@ -1,0 +1,35 @@
+; Native CBOR-first CDDL emitted by shacl2code
+Document = { label.@graph => [ * AnyClass ] } / { ~AnyClass }
+
+{%- for cls in class_defs %}
+{{ cls.name }} = { label.type => {{ cls.type_const }}, {% if cls.id_optional %}?{% endif %}{{ cls.id_label }} => {{ cls.id_type }}, ~{{ cls.name }}_props }
+{{ cls.name }}_derived = {{ cls.derived_choices | join(" / ") }}
+{{ cls.name }}_props = { {{ cls.parent_refs | join(", ") }}{% if cls.prop_entries %}, {% endif %}{%- for prop in cls.prop_entries %}{% if prop.optional %}?{% endif %}{{ prop.label }} => {{ prop.value }}{% if not loop.last %}, {% endif %}{% endfor %} }
+{%- for prop in cls.prop_defs %}
+{{ prop.name }} = {{ prop.type }}
+{%- endfor %}
+{% endfor %}
+IRI = tstr .regexp "[^_].*:.+|_[^:].*:.+"
+BlankNode = tstr .regexp "_:.+"
+BlankNodeOrIRI = IRI / BlankNode
+anyURI = tstr
+SHACLClass = { label.type => $label.type }
+$label.type /= IRI
+{%- for value in label_type_socket %}
+$label.type /= {{ value }}
+{%- endfor %}
+AnyClass = $AnyClass
+{%- for value in any_class_choices %}
+$AnyClass /= {{ value }}
+{%- endfor %}
+AnyObject = { * any => any }
+
+{%- for label in label_entries %}
+; {{ label.term }}
+{{ label.name }} = {{ label.value }}
+{%- endfor %}
+
+{%- for const in const_entries %}
+; {{ const.term }}
+{{ const.name }} = {{ const.value }}
+{%- endfor %}
